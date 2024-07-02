@@ -16,18 +16,7 @@ class DatabaseHelper(context: Context) :
     }
 
     override fun onCreate(db: SQLiteDatabase) {
-
-        val createTableCustomers = """
-            CREATE TABLE ${Task.TABLE_TASKS} (
-                ${Task.COLUMN_TASK_ID} INTEGER PRIMARY KEY AUTOINCREMENT,
-                ${Task.COLUMN_NAME} TEXT,
-                ${Task.COLUMN_DONE} INTEGER,
-                ${Task.COLUMN_DESCRIPTION} TEXT
-            )
-            """.trimIndent()
-
-
-        db.execSQL(createTableCustomers)
+        db.execSQL(Task.CREATE_TABLE)
     }
 
     override fun onUpgrade(db: SQLiteDatabase, oldVersion: Int, newVersion: Int) {
