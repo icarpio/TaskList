@@ -84,23 +84,25 @@ class TaskDAO(val context: Context) {
         db.close()
         return tasks
     }
-    fun getAllRecords(): Cursor {
+    fun getAllRecords(): List<Task> {
         val db = dbHelper.readableDatabase
         val cursor = db.rawQuery("SELECT * FROM " + Task.TABLE_TASKS, null)
-
+        var tasks = mutableListOf<Task>()
         if (cursor.moveToFirst()) {
             do {
-                // Suponiendo que los campos son id, name, description, done
                 val id = cursor.getInt(cursor.getColumnIndexOrThrow(BaseColumns._ID))
                 val name = cursor.getString(cursor.getColumnIndexOrThrow(Task.COLUMN_NAME))
                 val done = cursor.getInt(cursor.getColumnIndexOrThrow(Task.COLUMN_DONE)) == 1
                 val description = cursor.getString(cursor.getColumnIndexOrThrow(Task.COLUMN_DESCRIPTION))
+                val task = Task(id, name, done, description)
+                tasks.add(task)
                 // Imprimir en el log
                 Log.d("TaskRecord", "ID: $id, Name: $name, Done: $done, Description: $description")
             } while (cursor.moveToNext())
         }
+        cursor.close()
         db.close()
-        return cursor
+        return tasks
     }
     fun find(id: Int) : Task? {
         val db = dbHelper.readableDatabase
