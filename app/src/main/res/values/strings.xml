@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">TaskList</string>
+    <string name="newtask">Nueva Tarea</string>
+    <string name="date_max">Seleccionar fecha máxima</string>
+    <string name="date_not_select">Fecha no seleccionada</string>
+    <string name="save">Guardar</string>
 </resources>

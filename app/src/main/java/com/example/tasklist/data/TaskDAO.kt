@@ -17,7 +17,7 @@ class TaskDAO(val context: Context) {
         val contentValues = ContentValues().apply {
             put(Task.COLUMN_NAME, task.name)
             put(Task.COLUMN_DONE, task.done)
-            put(Task.COLUMN_DESCRIPTION ,task.description)
+            put(Task.COLUMN_DATEMAX ,task.dateMax)
         }
         val result = db.insert(Task.TABLE_TASKS, null, contentValues)
         task.id = result.toInt()
@@ -32,7 +32,7 @@ class TaskDAO(val context: Context) {
             val contentValues = ContentValues().apply {
                 put(Task.COLUMN_NAME, task.name)
                 put(Task.COLUMN_DONE, task.done)
-                put(Task.COLUMN_DESCRIPTION, task.description)
+                put(Task.COLUMN_DATEMAX, task.dateMax)
             }
             val result = db.update(
                 Task.TABLE_TASKS,
@@ -60,7 +60,7 @@ class TaskDAO(val context: Context) {
 
     fun findAll() : List<Task> {
         val db = dbHelper.readableDatabase
-        val projection = arrayOf(BaseColumns._ID, Task.COLUMN_NAME, Task.COLUMN_DONE,Task.COLUMN_DESCRIPTION)
+        val projection = arrayOf(BaseColumns._ID, Task.COLUMN_NAME, Task.COLUMN_DONE,Task.COLUMN_DATEMAX)
         val cursor = db.query(
             Task.TABLE_TASKS,                        // The table to query
             projection,                             // The array of columns to return (pass null to get all)
@@ -76,8 +76,8 @@ class TaskDAO(val context: Context) {
             val id = cursor.getInt(cursor.getColumnIndexOrThrow(BaseColumns._ID))
             val name = cursor.getString(cursor.getColumnIndexOrThrow(Task.COLUMN_NAME))
             val done = cursor.getInt(cursor.getColumnIndexOrThrow(Task.COLUMN_DONE)) == 1
-            val description = cursor.getString(cursor.getColumnIndexOrThrow(Task.COLUMN_DESCRIPTION))
-            val task = Task(id, name, done, description)
+            val dateMax = cursor.getString(cursor.getColumnIndexOrThrow(Task.COLUMN_DATEMAX))
+            val task = Task(id, name, done, dateMax)
             tasks.add(task)
         }
         cursor.close()
@@ -93,11 +93,11 @@ class TaskDAO(val context: Context) {
                 val id = cursor.getInt(cursor.getColumnIndexOrThrow(BaseColumns._ID))
                 val name = cursor.getString(cursor.getColumnIndexOrThrow(Task.COLUMN_NAME))
                 val done = cursor.getInt(cursor.getColumnIndexOrThrow(Task.COLUMN_DONE)) == 1
-                val description = cursor.getString(cursor.getColumnIndexOrThrow(Task.COLUMN_DESCRIPTION))
-                val task = Task(id, name, done, description)
+                val dateMax = cursor.getString(cursor.getColumnIndexOrThrow(Task.COLUMN_DATEMAX))
+                val task = Task(id, name, done, dateMax)
                 tasks.add(task)
                 // Imprimir en el log
-                Log.d("TaskRecord", "ID: $id, Name: $name, Done: $done, Description: $description")
+                //Log.d("TaskRecord", "ID: $id, Name: $name, Done: $done, Description: $description")
             } while (cursor.moveToNext())
         }
         cursor.close()
@@ -107,7 +107,7 @@ class TaskDAO(val context: Context) {
     fun find(id: Int) : Task? {
         val db = dbHelper.readableDatabase
 
-        val projection = arrayOf(BaseColumns._ID, Task.COLUMN_NAME, Task.COLUMN_DONE,Task.COLUMN_DESCRIPTION)
+        val projection = arrayOf(BaseColumns._ID, Task.COLUMN_NAME, Task.COLUMN_DONE,Task.COLUMN_DATEMAX)
 
         val cursor = db.query(
             Task.TABLE_TASKS,                        // The table to query
@@ -124,8 +124,8 @@ class TaskDAO(val context: Context) {
             val id = cursor.getInt(cursor.getColumnIndexOrThrow(BaseColumns._ID))
             val name = cursor.getString(cursor.getColumnIndexOrThrow(Task.COLUMN_NAME))
             val done = cursor.getInt(cursor.getColumnIndexOrThrow(Task.COLUMN_DONE)) == 1
-            val description = cursor.getString(cursor.getColumnIndexOrThrow(Task.COLUMN_DESCRIPTION))
-            task = Task(id, name, done, description)
+            val dateMax = cursor.getString(cursor.getColumnIndexOrThrow(Task.COLUMN_DATEMAX))
+            task = Task(id, name, done, dateMax)
         }
         cursor.close()
         db.close()
@@ -145,9 +145,9 @@ class TaskDAO(val context: Context) {
             val id = cursor.getInt(cursor.getColumnIndexOrThrow(BaseColumns._ID))
             val name = cursor.getString(cursor.getColumnIndexOrThrow(Task.COLUMN_NAME))
             val done = cursor.getInt(cursor.getColumnIndexOrThrow(Task.COLUMN_DONE)) == 1
-            val description = cursor.getString(cursor.getColumnIndexOrThrow(Task.COLUMN_DESCRIPTION))
+            val dateMax = cursor.getString(cursor.getColumnIndexOrThrow(Task.COLUMN_DATEMAX))
             // Imprimir en el log
-            Log.d("Task: ", "ID: $id, Name: $name, Done: $done, Description: $description")
+            Log.d("Task: ", "ID: $id, Name: $name, Done: $done, Description: $dateMax")
         }
         db.close()
         return cursor

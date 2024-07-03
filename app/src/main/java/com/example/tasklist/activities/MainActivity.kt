@@ -1,5 +1,7 @@
 package com.example.tasklist.activities
 
+import android.app.AlertDialog
+import android.content.DialogInterface
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -26,9 +28,15 @@ class MainActivity : AppCompatActivity() {
         // Obtener datos desde SQLite
         taskDAO = TaskDAO(this)
 
-        taskAdapter = TaskAdapter(){
+        taskAdapter = TaskAdapter(emptyList(),{
             Toast.makeText(this,"Click en tarea: ${taskList[it].name}", Toast.LENGTH_SHORT).show()
-        }
+        },{
+            showDeleteConfirmationDialog(it)
+            loadData()
+        },{
+            showDoneConfirmationDialog(it)
+            loadData()
+        })
         // Configurar RecyclerView
         binding.recyclerView.adapter = taskAdapter
         binding.recyclerView.layoutManager = LinearLayoutManager(this)
@@ -37,15 +45,58 @@ class MainActivity : AppCompatActivity() {
             val intent = Intent(this, AddActivity::class.java)
             startActivity(intent)
         }
-
-
     }
+
     override fun onResume(){
         super.onResume()
+        loadData()
+    }
+
+    private fun loadData() {
         taskList = taskDAO.getAllRecords()
         taskAdapter.updateData(taskList)
-
     }
+
+    fun showDeleteConfirmationDialog(position: Int) {
+        // Crea el AlertDialog
+        val builder = AlertDialog.Builder(this)
+        builder.setMessage("¿Estás seguro de que deseas eliminar esta tarea?")
+            .setPositiveButton("Sí") { dialog, id ->
+                // Usuario hizo clic en "Sí", así que elimina la tarea
+                taskDAO.deleteTask(taskList[position])
+                Toast.makeText(
+                    this,
+                    "Tarea borrada correctamente: ${taskList[position].name}",
+                    Toast.LENGTH_SHORT
+                ).show()
+                loadData()
+            }
+            .setNegativeButton("No") { dialog, id ->
+                // Usuario hizo clic en "No", así que solo cierra el diálogo
+                dialog.dismiss()
+            }
+        // Muestra el AlertDialog
+        builder.create().show()
+    }
+
+    fun showDoneConfirmationDialog(position: Int) {
+        val task = taskList[position]
+        // Crea el AlertDialog
+        val builder = AlertDialog.Builder(this)
+        builder.setMessage("¿Seguro que quieres modificar el estado de la tarea?")
+            .setPositiveButton("Sí") { dialog, id ->
+                task.done = !task.done
+                taskDAO.updateTask(task)
+                loadData()
+            }
+            .setNegativeButton("No") { dialog, id ->
+                dialog.dismiss()
+            }
+        builder.create().show()
+    }
+
+
+
 
 
 
