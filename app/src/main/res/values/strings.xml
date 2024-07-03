@@ -4,4 +4,6 @@
     <string name="date_max">Seleccionar fecha máxima</string>
     <string name="date_not_select">Fecha no seleccionada</string>
     <string name="save">Guardar</string>
+    <string name="nodata">No hay tareas pendientes, pulse el boton para añadirlas</string>
+
 </resources>

@@ -5,8 +5,10 @@ import android.content.DialogInterface
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.View
 import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.tasklist.R
 
 import com.example.tasklist.adapters.TaskAdapter
 import com.example.tasklist.data.Task
@@ -54,7 +56,19 @@ class MainActivity : AppCompatActivity() {
 
     private fun loadData() {
         taskList = taskDAO.getAllRecords()
-        taskAdapter.updateData(taskList)
+        if (taskList.isEmpty()) {
+            // Mostrar mensaje cuando no hay datos
+            binding.noDataTextView.text = getString(R.string.nodata)
+            binding.noDataTextView.visibility = View.VISIBLE
+
+            // Esconder el RecyclerView si no hay datos
+            binding.recyclerView.visibility = View.GONE
+        } else {
+            // Mostrar el RecyclerView con los datos
+            taskAdapter.updateData(taskList)
+            binding.noDataTextView.visibility = View.GONE
+            binding.recyclerView.visibility = View.VISIBLE
+        }
     }
 
     fun showDeleteConfirmationDialog(position: Int) {

@@ -64,12 +64,21 @@ class TaskViewHolder(val binding: TaskItemBinding) : RecyclerView.ViewHolder(bin
     fun render(task: Task) {
         binding.nameTextView.text = task.name
         binding.doneCheckBox.isChecked = task.done
+
+
         // Verificar si faltan menos de 24 horas
         if (!task.dateMax.isNullOrEmpty()) {
             try {
                 // Verificar si faltan menos de 24 horas
                 val dateMax = LocalDateTime.parse(task.dateMax, DateTimeFormatter.ISO_DATE_TIME)
                 val now = LocalDateTime.now()
+
+                // Definir el formateador de fecha
+                val formateador = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm")
+                // Formatear la fecha como un String
+                val fechaFormateada = dateMax.format(formateador)
+
+                binding.dateMaxTextView.text = fechaFormateada
                 if (Duration.between(now, dateMax).toHours() < 24) {
                     binding.nameTextView.setTextColor(Color.RED)
                 } else {

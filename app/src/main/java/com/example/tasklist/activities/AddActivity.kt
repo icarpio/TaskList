@@ -5,6 +5,7 @@ import android.app.TimePickerDialog
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import com.example.tasklist.R
@@ -32,11 +33,19 @@ class AddActivity : AppCompatActivity() {
 
         binding.saveButton.setOnClickListener {
             val taskName = binding.nameEditText.text.toString()
-            val dateFormat = dateMax!!.format(DateTimeFormatter.ISO_DATE_TIME)
-            val task = Task(-1, taskName,false,dateFormat)
-            taskDAO.insertTask(task)
-            Toast.makeText(this, "Tarea guardad correctamente", Toast.LENGTH_SHORT).show()
-            finish()
+
+            // Verificar si taskName no está vacío
+            if (taskName.isNotEmpty() && dateMax != null) {
+                val dateFormat = dateMax!!.format(DateTimeFormatter.ISO_DATE_TIME)
+                val task = Task(-1, taskName, false, dateFormat)
+                taskDAO.insertTask(task)
+                Toast.makeText(this, "Tarea guardada correctamente", Toast.LENGTH_SHORT).show()
+                // Finalizar la actividad después de guardar la tarea
+                finish()
+            } else {
+                // Mostrar mensaje de error usando Toast si algún campo está vacío
+                Toast.makeText(this, "Por favor, completa todos los campos y selecciona una fecha.", Toast.LENGTH_LONG).show()
+            }
         }
         binding.selectDateMaxButton.setOnClickListener {
             showDatePickerDialog()
