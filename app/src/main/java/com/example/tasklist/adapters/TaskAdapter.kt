@@ -36,10 +36,14 @@ class TaskAdapter(
     override fun onBindViewHolder(holder: TaskViewHolder, position: Int) {
         holder.render(dataSet[position])
 
+        /*
         holder.itemView.setOnClickListener {
             onItemClickListener(position)
+        }*/
+        holder.binding.editButton.setOnClickListener {
+            // Puedes tener una acción diferente para el botón de edición si es necesario
+            onItemClickListener(position)
         }
-
         holder.binding.deleteButton.setOnClickListener {
             onItemDeleteClickListener(position)
         }
@@ -79,9 +83,11 @@ class TaskViewHolder(val binding: TaskItemBinding) : RecyclerView.ViewHolder(bin
                 val fechaFormateada = dateMax.format(formateador)
 
                 binding.dateMaxTextView.text = fechaFormateada
-                if (Duration.between(now, dateMax).toHours() < 24) {
+                if (Duration.between(now, dateMax).toHours() in 13..24) {
+                    binding.nameTextView.setTextColor(Color.GREEN)
+                } else if (Duration.between(now, dateMax).toHours() < 12) {
                     binding.nameTextView.setTextColor(Color.RED)
-                } else {
+                }else {
                     binding.nameTextView.setTextColor(Color.BLACK)
                 }
             } catch (e: DateTimeParseException) {

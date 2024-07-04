@@ -12,16 +12,17 @@ import com.example.tasklist.R
 import com.example.tasklist.data.Task
 import com.example.tasklist.data.TaskDAO
 import com.example.tasklist.databinding.ActivityAddBinding
+import com.example.tasklist.utils.DateTimePickerHelper
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 import java.util.Calendar
 
 class AddActivity : AppCompatActivity() {
+
     private lateinit var binding: ActivityAddBinding
-
     private lateinit var taskDAO: TaskDAO
-
     private var dateMax: LocalDateTime? = null
+    private lateinit var dateTimePickerHelper: DateTimePickerHelper
 
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -29,14 +30,15 @@ class AddActivity : AppCompatActivity() {
         binding = ActivityAddBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        taskDAO = TaskDAO(this)
+        dateTimePickerHelper = DateTimePickerHelper(this)
 
+        taskDAO = TaskDAO(this)
         binding.saveButton.setOnClickListener {
             val taskName = binding.nameEditText.text.toString()
-
             // Verificar si taskName no está vacío
             if (taskName.isNotEmpty() && dateMax != null) {
                 val dateFormat = dateMax!!.format(DateTimeFormatter.ISO_DATE_TIME)
+
                 val task = Task(-1, taskName, false, dateFormat)
                 taskDAO.insertTask(task)
                 Toast.makeText(this, "Tarea guardada correctamente", Toast.LENGTH_SHORT).show()
@@ -50,24 +52,17 @@ class AddActivity : AppCompatActivity() {
         binding.selectDateMaxButton.setOnClickListener {
             showDatePickerDialog()
         }
+
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
     private fun showDatePickerDialog() {
-        val now = Calendar.getInstance()
-        val datePickerDialog = DatePickerDialog(this, { _, year, month, dayOfMonth ->
-            showTimePickerDialog(year, month, dayOfMonth)
-        }, now.get(Calendar.YEAR), now.get(Calendar.MONTH), now.get(Calendar.DAY_OF_MONTH))
-        datePickerDialog.show()
+        dateTimePickerHelper.showDatePickerDialog { selectedDateTime ->
+            dateMax = selectedDateTime
+            binding.dateMaxSelectedTextView.text = dateMax.toString()
+        }
     }
 
-    @RequiresApi(Build.VERSION_CODES.O)
-    private fun showTimePickerDialog(year: Int, month: Int, dayOfMonth: Int) {
-        val now = Calendar.getInstance()
-        val timePickerDialog = TimePickerDialog(this, { _, hourOfDay, minute ->
-            dateMax = LocalDateTime.of(year, month + 1, dayOfMonth, hourOfDay, minute)
-            binding.dateMaxSelectedTextView.text = dateMax?.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"))
-        }, now.get(Calendar.HOUR_OF_DAY), now.get(Calendar.MINUTE), true)
-        timePickerDialog.show()
-    }
+
+
 }

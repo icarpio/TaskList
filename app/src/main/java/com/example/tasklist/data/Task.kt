@@ -8,7 +8,7 @@ import android.provider.BaseColumns
 
 data class Task(
     var id: Int,
-    val name: String,
+    var name: String,
     var done: Boolean,
     var dateMax:String) {
 
