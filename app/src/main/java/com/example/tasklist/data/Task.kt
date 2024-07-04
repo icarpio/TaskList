@@ -16,8 +16,6 @@ data class Task(
     companion object {
 
         //Tabla categorias
-
-
         const val TABLE_CATEGORY = "Categories"
         const val COLUMN_NAME_CATEGORY = "name"
 
