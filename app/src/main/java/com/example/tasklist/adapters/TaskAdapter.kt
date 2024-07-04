@@ -68,6 +68,7 @@ class TaskViewHolder(val binding: TaskItemBinding) : RecyclerView.ViewHolder(bin
     fun render(task: Task) {
         binding.nameTextView.text = task.name
         binding.doneCheckBox.isChecked = task.done
+        val colorGreen = binding.root.context.getColor(R.color.success)
 
 
         // Verificar si faltan menos de 24 horas
@@ -84,9 +85,10 @@ class TaskViewHolder(val binding: TaskItemBinding) : RecyclerView.ViewHolder(bin
 
                 binding.dateMaxTextView.text = fechaFormateada
                 if (Duration.between(now, dateMax).toHours() in 13..24) {
-                    binding.nameTextView.setTextColor(Color.GREEN)
+                    binding.nameTextView.setTextColor(colorGreen)
                 } else if (Duration.between(now, dateMax).toHours() < 12) {
                     binding.nameTextView.setTextColor(Color.RED)
+                    binding.iconImageView.visibility = View.VISIBLE
                 }else {
                     binding.nameTextView.setTextColor(Color.BLACK)
                 }

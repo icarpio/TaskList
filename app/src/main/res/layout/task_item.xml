@@ -10,25 +10,45 @@
         android:text="Nombre de la tarea"
         android:textSize="18sp"
         android:layout_alignParentStart="true"
-        android:layout_toStartOf="@id/deleteButton"/>
-
-    <TextView
-        android:id="@+id/dateMaxTextView"
+        android:layout_toStartOf="@id/deleteButton" />
+    <LinearLayout
+        android:id="@+id/Linear1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Fecha maxima"
-        android:layout_below="@id/nameTextView"
-        android:layout_alignParentStart="true"
-        android:layout_marginTop="8dp"/>
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="10dp"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:padding="5dp">
+        <TextView
+            android:id="@+id/dateMaxTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="29dp"
+            android:layout_below="@id/nameTextView"
+            android:layout_alignParentStart="true"
+            android:layout_marginTop="10dp"
+            android:text="Fecha maxima" />
+
+        <ImageView
+            android:id="@+id/iconImageView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:src="@drawable/alert"
+            android:layout_marginTop="3dp"
+            android:visibility="gone"/>
+
+    </LinearLayout>
+
+
 
     <CheckBox
         android:id="@+id/doneCheckBox"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Done"
-        android:layout_below="@id/nameTextView"
+        android:layout_below="@id/Linear1"
         android:layout_alignParentStart="true"
-        android:layout_marginTop="20dp"/>
+        android:text="Done" />
 
     <ImageView
         android:id="@+id/deleteButton"

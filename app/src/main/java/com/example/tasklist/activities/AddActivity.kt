@@ -12,7 +12,12 @@ import com.example.tasklist.R
 import com.example.tasklist.data.Task
 import com.example.tasklist.data.TaskDAO
 import com.example.tasklist.databinding.ActivityAddBinding
+import com.example.tasklist.network.RetrofitInstance
 import com.example.tasklist.utils.DateTimePickerHelper
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 import java.util.Calendar
@@ -37,7 +42,7 @@ class AddActivity : AppCompatActivity() {
             val taskName = binding.nameEditText.text.toString()
             // Verificar si taskName no está vacío
             if (taskName.isNotEmpty() && dateMax != null) {
-                val dateFormat = dateMax!!.format(DateTimeFormatter.ISO_DATE_TIME)
+                val dateFormat = dateMax!!.format(DateTimeFormatter.ISO_LOCAL_DATE)
 
                 val task = Task(-1, taskName, false, dateFormat)
                 taskDAO.insertTask(task)
@@ -52,7 +57,17 @@ class AddActivity : AppCompatActivity() {
         binding.selectDateMaxButton.setOnClickListener {
             showDatePickerDialog()
         }
-
+        CoroutineScope(Dispatchers.IO).launch {
+            val response = RetrofitInstance.phraseApiService.getPhrase()
+            withContext(Dispatchers.Main) {
+                if (response.isSuccessful) {
+                    val phrase = response.body()
+                    binding.todayPhraseTextView.text = "Frase del dia:" + phrase?.phrase
+                } else {
+                    Log.e("RETROFIT", "Error en la solicitud: ${response.code()}")
+                }
+            }
+        }
     }
 
     @RequiresApi(Build.VERSION_CODES.O)

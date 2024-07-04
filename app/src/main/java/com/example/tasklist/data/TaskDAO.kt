@@ -58,32 +58,6 @@ class TaskDAO(val context: Context) {
     }
 
 
-    fun findAll() : List<Task> {
-        val db = dbHelper.readableDatabase
-        val projection = arrayOf(BaseColumns._ID, Task.COLUMN_NAME, Task.COLUMN_DONE,Task.COLUMN_DATEMAX)
-        val cursor = db.query(
-            Task.TABLE_TASKS,                        // The table to query
-            projection,                             // The array of columns to return (pass null to get all)
-            null,                            // The columns for the WHERE clause
-            null,                         // The values for the WHERE clause
-            null,                            // don't group the rows
-            null,                             // don't filter by row groups
-            null                             // The sort order
-        )
-
-        var tasks = mutableListOf<Task>()
-        while (cursor.moveToNext()) {
-            val id = cursor.getInt(cursor.getColumnIndexOrThrow(BaseColumns._ID))
-            val name = cursor.getString(cursor.getColumnIndexOrThrow(Task.COLUMN_NAME))
-            val done = cursor.getInt(cursor.getColumnIndexOrThrow(Task.COLUMN_DONE)) == 1
-            val dateMax = cursor.getString(cursor.getColumnIndexOrThrow(Task.COLUMN_DATEMAX))
-            val task = Task(id, name, done, dateMax)
-            tasks.add(task)
-        }
-        cursor.close()
-        db.close()
-        return tasks
-    }
     fun getAllRecords(): List<Task> {
         val db = dbHelper.readableDatabase
         val cursor = db.rawQuery("SELECT * FROM " + Task.TABLE_TASKS, null)
@@ -104,33 +78,7 @@ class TaskDAO(val context: Context) {
         db.close()
         return tasks
     }
-    fun find(id: Int) : Task? {
-        val db = dbHelper.readableDatabase
 
-        val projection = arrayOf(BaseColumns._ID, Task.COLUMN_NAME, Task.COLUMN_DONE,Task.COLUMN_DATEMAX)
-
-        val cursor = db.query(
-            Task.TABLE_TASKS,                        // The table to query
-            projection,                             // The array of columns to return (pass null to get all)
-            "${BaseColumns._ID} = $id",      // The columns for the WHERE clause
-            null,                         // The values for the WHERE clause
-            null,                            // don't group the rows
-            null,                             // don't filter by row groups
-            null                             // The sort order
-        )
-
-        var task: Task? = null
-        if (cursor.moveToNext()) {
-            val id = cursor.getInt(cursor.getColumnIndexOrThrow(BaseColumns._ID))
-            val name = cursor.getString(cursor.getColumnIndexOrThrow(Task.COLUMN_NAME))
-            val done = cursor.getInt(cursor.getColumnIndexOrThrow(Task.COLUMN_DONE)) == 1
-            val dateMax = cursor.getString(cursor.getColumnIndexOrThrow(Task.COLUMN_DATEMAX))
-            task = Task(id, name, done, dateMax)
-        }
-        cursor.close()
-        db.close()
-        return task
-    }
     fun getRecordById(id: Int): Cursor {
         val db = dbHelper.readableDatabase
 
