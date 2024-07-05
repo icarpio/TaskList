@@ -6,9 +6,11 @@ import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import com.example.tasklist.R
+import com.example.tasklist.data.CategoryDAO
 import com.example.tasklist.data.Task
 import com.example.tasklist.data.TaskDAO
 import com.example.tasklist.databinding.ActivityAddBinding
@@ -26,8 +28,10 @@ class AddActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityAddBinding
     private lateinit var taskDAO: TaskDAO
+    private lateinit var catDAO:CategoryDAO
     private var dateMax: LocalDateTime? = null
     private lateinit var dateTimePickerHelper: DateTimePickerHelper
+
 
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -38,13 +42,25 @@ class AddActivity : AppCompatActivity() {
         dateTimePickerHelper = DateTimePickerHelper(this)
 
         taskDAO = TaskDAO(this)
+        catDAO = CategoryDAO(this)
+        val categories = catDAO.getAllCategories()
+        val categoryNames = categories.map { it.name }
+        Log.d("CATEGORIAS", categoryNames.toString())
+
+        // Configurar el Spinner
+        val spinner = ArrayAdapter(this, android.R.layout.simple_spinner_item, categoryNames)
+        spinner.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        binding.categorySpinner.adapter = spinner
+
         binding.saveButton.setOnClickListener {
             val taskName = binding.nameEditText.text.toString()
+            val selectedCategoryPosition = binding.categorySpinner.selectedItemPosition
+            val selectedCategoryId = categories[selectedCategoryPosition].id
             // Verificar si taskName no está vacío
             if (taskName.isNotEmpty() && dateMax != null) {
-                val dateFormat = dateMax!!.format(DateTimeFormatter.ISO_LOCAL_DATE)
+                val dateFormat = dateMax!!.format(DateTimeFormatter.ISO_DATE_TIME)
 
-                val task = Task(-1, taskName, false, dateFormat)
+                val task = Task(-1, taskName, false, dateFormat,selectedCategoryId)
                 taskDAO.insertTask(task)
                 Toast.makeText(this, "Tarea guardada correctamente", Toast.LENGTH_SHORT).show()
                 // Finalizar la actividad después de guardar la tarea

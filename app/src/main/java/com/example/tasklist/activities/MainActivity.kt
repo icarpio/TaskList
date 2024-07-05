@@ -15,6 +15,8 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.tasklist.R
 
 import com.example.tasklist.adapters.TaskAdapter
+import com.example.tasklist.data.Category
+import com.example.tasklist.data.CategoryDAO
 import com.example.tasklist.data.Task
 import com.example.tasklist.data.TaskDAO
 import com.example.tasklist.databinding.ActivityMainBinding
@@ -28,11 +30,11 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var taskAdapter: TaskAdapter
     private lateinit var taskDAO: TaskDAO
+    private lateinit var catDAO:CategoryDAO
     private lateinit var binding: ActivityMainBinding
     private lateinit var taskList:List<Task>
     private var dateMax: LocalDateTime? = null
     private lateinit var dateTimePickerHelper: DateTimePickerHelper
-
 
 
     @RequiresApi(Build.VERSION_CODES.O)
@@ -43,9 +45,29 @@ class MainActivity : AppCompatActivity() {
 
         // Obtener datos desde SQLite
         taskDAO = TaskDAO(this)
+        catDAO = CategoryDAO(this)
 
         dateTimePickerHelper = DateTimePickerHelper(this)
 
+        /*
+        val categories = listOf(
+            Category(0, "Trabajo"),
+            Category(0, "Estudio"),
+            Category(0, "Personal"),
+            Category(0, "Hogar"),
+            Category(0, "Ejercicio"),
+            Category(0, "Finanzas"),
+            Category(0, "Ocio"),
+            Category(0, "Viajes"),
+            Category(0, "Proyectos"),
+            Category(0, "Social"),
+            Category(0, "Salud"),
+        )
+        // Insertar las categorías en la base de datos
+        categories.forEach { category ->
+            catDAO.insertCategory(category)
+            println("Categoría '${category.name}' ha sido insertada con el ID: ${category.id}")
+        }*/
         taskAdapter = TaskAdapter(emptyList(),{
             showEditDialog(it)
         },{

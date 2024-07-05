@@ -5,9 +5,10 @@ import android.content.Context
 import android.database.Cursor
 import android.provider.BaseColumns
 import android.util.Log
+import androidx.core.content.contentValuesOf
 import com.example.tasklist.utils.DatabaseHelper
 
-class TaskDAO(val context: Context) {
+class TaskDAO(context: Context) {
 
     private var dbHelper: DatabaseHelper = DatabaseHelper(context)
 
@@ -18,8 +19,10 @@ class TaskDAO(val context: Context) {
             put(Task.COLUMN_NAME, task.name)
             put(Task.COLUMN_DONE, task.done)
             put(Task.COLUMN_DATEMAX ,task.dateMax)
+            put(Task.COLUMN_CATEGORY_ID, task.categoryId)
         }
         val result = db.insert(Task.TABLE_TASKS, null, contentValues)
+
         task.id = result.toInt()
     }
 
@@ -68,10 +71,11 @@ class TaskDAO(val context: Context) {
                 val name = cursor.getString(cursor.getColumnIndexOrThrow(Task.COLUMN_NAME))
                 val done = cursor.getInt(cursor.getColumnIndexOrThrow(Task.COLUMN_DONE)) == 1
                 val dateMax = cursor.getString(cursor.getColumnIndexOrThrow(Task.COLUMN_DATEMAX))
-                val task = Task(id, name, done, dateMax)
+                val categoryId = cursor.getInt(cursor.getColumnIndexOrThrow(Task.COLUMN_CATEGORY_ID))
+                val task = Task(id, name, done, dateMax,categoryId)
                 tasks.add(task)
                 // Imprimir en el log
-                //Log.d("TaskRecord", "ID: $id, Name: $name, Done: $done, Description: $description")
+                Log.d("TaskRecord", "ID: $id, Name: $name, Done: $done, datemax: $dateMax")
             } while (cursor.moveToNext())
         }
         cursor.close()
@@ -94,6 +98,7 @@ class TaskDAO(val context: Context) {
             val name = cursor.getString(cursor.getColumnIndexOrThrow(Task.COLUMN_NAME))
             val done = cursor.getInt(cursor.getColumnIndexOrThrow(Task.COLUMN_DONE)) == 1
             val dateMax = cursor.getString(cursor.getColumnIndexOrThrow(Task.COLUMN_DATEMAX))
+            val categoryId = cursor.getInt(cursor.getColumnIndexOrThrow(Task.COLUMN_CATEGORY_ID))
             // Imprimir en el log
             Log.d("Task: ", "ID: $id, Name: $name, Done: $done, Description: $dateMax")
         }

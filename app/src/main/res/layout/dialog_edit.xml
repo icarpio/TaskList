@@ -15,5 +15,4 @@
     android:layout_height="wrap_content"
     android:text="@string/modify_date"
     android:layout_marginTop="20dp" />
-
 </LinearLayout>

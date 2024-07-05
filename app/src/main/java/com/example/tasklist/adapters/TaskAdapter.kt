@@ -76,6 +76,8 @@ class TaskViewHolder(val binding: TaskItemBinding) : RecyclerView.ViewHolder(bin
             try {
                 // Verificar si faltan menos de 24 horas
                 val dateMax = LocalDateTime.parse(task.dateMax, DateTimeFormatter.ISO_DATE_TIME)
+
+
                 val now = LocalDateTime.now()
 
                 // Definir el formateador de fecha
