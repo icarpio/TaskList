@@ -6,4 +6,5 @@
     <string name="save">Guardar</string>
     <string name="nodata">No hay tareas pendientes, pulse el boton para añadirlas</string>
     <string name="modify_date">Fecha/hora</string>
+    <string name="cate">Categoria</string>
 </resources>

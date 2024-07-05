@@ -1,9 +1,6 @@
 package com.example.tasklist.activities
 
 import android.app.AlertDialog
-import android.app.DatePickerDialog
-import android.app.TimePickerDialog
-import android.content.DialogInterface
 import android.content.Intent
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
@@ -15,7 +12,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.tasklist.R
 
 import com.example.tasklist.adapters.TaskAdapter
-import com.example.tasklist.data.Category
 import com.example.tasklist.data.CategoryDAO
 import com.example.tasklist.data.Task
 import com.example.tasklist.data.TaskDAO
@@ -24,7 +20,6 @@ import com.example.tasklist.databinding.DialogEditBinding
 import com.example.tasklist.utils.DateTimePickerHelper
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
-import java.util.Calendar
 
 class MainActivity : AppCompatActivity() {
 

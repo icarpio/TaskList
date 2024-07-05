@@ -1,17 +1,17 @@
 package com.example.tasklist.adapters
 
-import android.database.Cursor
 import android.graphics.Color
 import android.os.Build
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.AdapterView.OnItemClickListener
-import android.widget.TextView
 import androidx.annotation.RequiresApi
+import androidx.appcompat.view.menu.MenuView.ItemView
 import androidx.recyclerview.widget.RecyclerView
+import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import com.example.tasklist.R
+import com.example.tasklist.data.CategoryDAO
 import com.example.tasklist.data.Task
 import com.example.tasklist.databinding.TaskItemBinding
 import java.time.Duration
@@ -69,6 +69,17 @@ class TaskViewHolder(val binding: TaskItemBinding) : RecyclerView.ViewHolder(bin
         binding.nameTextView.text = task.name
         binding.doneCheckBox.isChecked = task.done
         val colorGreen = binding.root.context.getColor(R.color.success)
+        val appContext = itemView.context.applicationContext
+
+        val catDAO = CategoryDAO(appContext)
+
+
+        val category = catDAO.getCategoryById(task.categoryId)
+        val cat = category?.name
+
+        binding.categoryTextView.text = cat
+        binding.doneCheckBox.isChecked = task.done
+
 
 
         // Verificar si faltan menos de 24 horas

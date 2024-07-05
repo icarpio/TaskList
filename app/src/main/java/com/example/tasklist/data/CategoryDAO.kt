@@ -2,12 +2,12 @@ package com.example.tasklist.data
 
 import android.content.ContentValues
 import android.content.Context
-import android.database.Cursor
 import android.provider.BaseColumns
 import android.util.Log
+import com.example.tasklist.adapters.TaskViewHolder
 import com.example.tasklist.utils.DatabaseHelper
 
-class CategoryDAO (context: Context) {
+class CategoryDAO(context: Context) {
 
     private var dbHelper: DatabaseHelper = DatabaseHelper(context)
     fun insertCategory(category: Category) {
